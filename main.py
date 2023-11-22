@@ -20,7 +20,7 @@ class Currency:
 	# Метод для получения курса валюты
 	def get_currency_price(self):
 		# Парсим всю страницу
-		full_page = requests.get(self.DOLLAR_RUB, headers=self.headers)
+		full_page = requests.get(self.DOLLAR_EURO, headers=self.headers)
 
 		# Разбираем через BeautifulSoup
 		soup = BeautifulSoup(full_page.content, 'html.parser')
