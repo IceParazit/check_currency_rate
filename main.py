@@ -34,10 +34,8 @@ class Currency:
 		currency = float(self.get_currency_price().replace(",", "."))
 		if currency >= self.current_converted_price + self.difference:
 			print("Курс сильно вырос, может пора что-то делать?")
-			self.send_mail()
 		elif currency <= self.current_converted_price - self.difference:
 			print("Курс сильно упал, может пора что-то делать?")
-			self.send_mail()
 
 		print("Сейчас курс: 1 доллар = " + str(currency))
 		time.sleep(3) # Засыпание программы на 3 секунды
