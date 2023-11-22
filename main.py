@@ -33,6 +33,8 @@ class Currency:
 	def check_currency(self):
 		currency = float(self.get_currency_price().replace(",", "."))
 		print("Сейчас разница евродоллар " + str(currency))
+		message = ("Сейчас разница евродоллар " + str(currency))
+		return message
 
 
 
