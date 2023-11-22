@@ -37,7 +37,7 @@ class Currency:
 		elif currency <= self.current_converted_price - self.difference:
 			print("Курс сильно упал, может пора что-то делать?")
 
-		print("Сейчас курс: 1 доллар = " + str(currency))
+		print("Сейчас курс: 1 доллар = " + str(currency)"Евро")
 
 
 
