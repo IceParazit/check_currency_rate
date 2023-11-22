@@ -31,6 +31,7 @@ class Currency:
 
 	# Проверка изменения валюты
 	def check_currency(self):
+		currency = float(self.get_currency_price().replace(",", "."))
 		print("Сейчас разница евродоллар " + str(currency))
 
 
