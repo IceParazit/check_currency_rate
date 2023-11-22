@@ -1,0 +1,58 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<flow-definition plugin="workflow-job@1360.vc6700e3136f5">
+  <actions>
+    <org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobAction plugin="pipeline-model-definition@2.2151.ve32c9d209a_3f"/>
+    <org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobPropertyTrackerAction plugin="pipeline-model-definition@2.2151.ve32c9d209a_3f">
+      <jobProperties/>
+      <triggers/>
+      <parameters/>
+      <options/>
+    </org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobPropertyTrackerAction>
+  </actions>
+  <description></description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <org.jenkinsci.plugins.workflow.job.properties.PipelineTriggersJobProperty>
+      <triggers>
+        <hudson.triggers.TimerTrigger>
+          <spec>H 10 * * *</spec>
+        </hudson.triggers.TimerTrigger>
+      </triggers>
+    </org.jenkinsci.plugins.workflow.job.properties.PipelineTriggersJobProperty>
+  </properties>
+  <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@3806.va_3a_6988277b_2">
+    <script>pipeline {
+    agent any
+    stages {
+        stage(&apos;Checkout&apos;) {
+            steps {
+                checkout([$class: &apos;GitSCM&apos;, branches: [[name: &apos;main&apos;]], extensions: [], userRemoteConfigs: [[url: &apos;https://github.com/IceParazit/check_currency_rate.git&apos;]]])
+            }
+        }
+        stage(&apos;Build&apos;) {
+            steps {
+
+                git branch: &apos;main&apos;, url: &apos;https://github.com/IceParazit/check_currency_rate.git&apos;
+                script {
+                    // Выполнение Python-скрипта и сохранение вывода в переменной
+                    def scriptOutput = sh(script: &apos;python3 main.py&apos;, returnStdout: true).trim()
+
+                    // Вывод сообщения в лог Jenkins
+                    echo &quot;Output from main.py: ${scriptOutput}&quot;
+
+                    // Присвоение значения переменной окружения для дальнейшего использования
+                    env.MESSAGE = scriptOutput
+                    sh &quot;&quot;&quot;
+                    curl -s -X POST https://api.telegram.org/bot[BOT_TOKEN]/sendMessage -d chat_id [chat_id] -d text=&quot;${env.MESSAGE}&quot;
+                    &quot;&quot;&quot;
+                }
+            }
+        }
+    }
+}
+</script>
+    <sandbox>true</sandbox>
+  </definition>
+  <triggers/>
+  <disabled>false</disabled>
+</flow-definition>
